@@ -1,0 +1,723 @@
+[
+    {
+        "id": "584d946fafb51ab1",
+        "type": "tab",
+        "label": "Flux 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bd27d5e92c3422c8",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "f894ebae07461279",
+        "name": "/Courant1",
+        "measurement": "/Courant1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 420,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a0bfb23f236be43c",
+        "type": "mqtt in",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "topic": "/ReacPower1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4c1b2f5863be0263",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "d2e55b1d1524018d",
+                "93680c6cad57f76b"
+            ]
+        ]
+    },
+    {
+        "id": "87b6c1236437ed69",
+        "type": "inject",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 480,
+        "wires": [
+            [
+                "a447a3bd24690191"
+            ]
+        ]
+    },
+    {
+        "id": "742b6ca78f5648ce",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "Reac_Power1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d2e55b1d1524018d",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "func": "msg.payload.reactive=msg.payload \nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "742b6ca78f5648ce",
+                "e0cb7a2b1c1ffc60"
+            ]
+        ]
+    },
+    {
+        "id": "93680c6cad57f76b",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "func": "\nflow.set(\"reactive\", msg.payload);\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a447a3bd24690191",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "function 3",
+        "func": "var Q=flow.get('reactive') || 0;\nvar P=flow.get('active') || 0;\n\nvar S = Math.sqrt(Math.pow(P, 2) + Math.pow(Q, 2));\n\n// Ajouter la valeur de l'énergie apparente à la charge utile (payload) du message\nmsg.payload = S;\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "9db39ab9baef9ce9",
+                "dd2543f3bda4c279"
+            ]
+        ]
+    },
+    {
+        "id": "9db39ab9baef9ce9",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "AppPower1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "dd2543f3bda4c279",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "f894ebae07461279",
+        "name": "/AppPower1",
+        "measurement": "/AppPower1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 610,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "7f1771ec79a4b054",
+        "type": "inject",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 660,
+        "wires": [
+            [
+                "abc4220a32eb9348"
+            ]
+        ]
+    },
+    {
+        "id": "abc4220a32eb9348",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "function 4",
+        "func": "var Q=flow.get('reactive') || 0;\nvar P=flow.get('active') || 0;\nvar angle_rad = Math.atan(Q / P);\nvar PF = Math.cos(angle_rad);\nmsg.payload = PF;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 660,
+        "wires": [
+            [
+                "ece8f83dc4e00504",
+                "a449ecf22fd77f8a",
+                "3e3c1671cdf2beeb"
+            ]
+        ]
+    },
+    {
+        "id": "ece8f83dc4e00504",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "Power_Factor1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "a449ecf22fd77f8a",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "a61054190211a3f0",
+        "name": "/Power_Factor1",
+        "measurement": "/Power_Factor1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 600,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "b0cc183db0f5850b",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "Courant1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "a198096161eb3126",
+        "type": "mqtt in",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "topic": "/Courant1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4c1b2f5863be0263",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "b0cc183db0f5850b",
+                "bd27d5e92c3422c8",
+                "aff3a587a6a8f838"
+            ]
+        ]
+    },
+    {
+        "id": "e0cb7a2b1c1ffc60",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "f894ebae07461279",
+        "name": "/ReacPower1",
+        "measurement": "/ReacPower1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 720,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "a0eb8b39efc47dd7",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "Accumulator",
+        "func": "// Extract power value from message payload and convert it to a floating point number\nconst power = parseFloat(msg.payload);\nlet accumulatedPower = flow.get('accumulatedPower') || 0;\naccumulatedPower += power;\nflow.set('accumulatedPower', accumulatedPower);\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 920,
+        "wires": [
+            [
+                "d0ea151d31b141a0"
+            ]
+        ]
+    },
+    {
+        "id": "57633efeadce48b9",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "Power1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "19ba024001249ead",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "b2b10b77.06d948",
+        "name": "/Energy1",
+        "measurement": "/Energy1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "retentionPolicyV18Flux": "",
+        "org": "IOT_Projects",
+        "bucket": "MP_IOT_",
+        "x": 840,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "d0ea151d31b141a0",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "Energy_conversion",
+        "func": "// Retrieve accumulated power from flow context, defaulting to 0 if not present\nconst accumulatedPower = flow.get('accumulatedPower') || 0;\n\n// Check if accumulated power is zero\nif (accumulatedPower === 0) {\n    node.warn(\"Accumulated power is zero. No energy calculation performed.\");\n    return null;\n}\n\n// Calculate energy in kWh from accumulated power\nconst energy = accumulatedPower * 10 / (3600 * 1000);\nmsg.payload = energy;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 920,
+        "wires": [
+            [
+                "19ba024001249ead",
+                "3bbc6cd380361611",
+                "4f0323dccabce6f5"
+            ]
+        ]
+    },
+    {
+        "id": "d54088cf21cc1fcd",
+        "type": "inject",
+        "z": "584d946fafb51ab1",
+        "name": "each_10sec",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 470,
+        "y": 860,
+        "wires": [
+            [
+                "d0ea151d31b141a0"
+            ]
+        ]
+    },
+    {
+        "id": "3bbc6cd380361611",
+        "type": "debug",
+        "z": "584d946fafb51ab1",
+        "name": "energie_10sec",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "4f0323dccabce6f5",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "write into a csv",
+        "func": "var t=new Date().toLocaleString();\nmsg.data=msg.payload\nmsg.payload={\"time\": t, \"Data_energy\":msg.data}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 1060,
+        "wires": [
+            [
+                "0d1ad586e031170f"
+            ]
+        ]
+    },
+    {
+        "id": "0d1ad586e031170f",
+        "type": "file",
+        "z": "584d946fafb51ab1",
+        "name": "MP_IOT_Backup",
+        "filename": "C:\\Users\\marie\\OneDrive\\Bureau\\MP_IOT_Backup_Energy1.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1010,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "197e13e01ca0c981",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "func": "msg.payload.active=msg.payload \nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "67c6086739bda46e",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "func": "\nflow.set(\"active\", msg.payload);\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a11d46cc4a9d833f",
+        "type": "influxdb out",
+        "z": "584d946fafb51ab1",
+        "influxdb": "f894ebae07461279",
+        "name": "/Power1",
+        "measurement": "/Power1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 360,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "02eafb4b8db12946",
+        "type": "mqtt in",
+        "z": "584d946fafb51ab1",
+        "name": "",
+        "topic": "/Power1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4c1b2f5863be0263",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 940,
+        "wires": [
+            [
+                "57633efeadce48b9",
+                "a0eb8b39efc47dd7",
+                "a11d46cc4a9d833f",
+                "197e13e01ca0c981",
+                "67c6086739bda46e"
+            ]
+        ]
+    },
+    {
+        "id": "aff3a587a6a8f838",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "write into a csv",
+        "func": "var t=new Date().toLocaleString();\nmsg.data=msg.payload\nmsg.payload={\"time\": t, \"Data_courant\":msg.data}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 200,
+        "wires": [
+            [
+                "86f10622d7e4ad2a"
+            ]
+        ]
+    },
+    {
+        "id": "86f10622d7e4ad2a",
+        "type": "file",
+        "z": "584d946fafb51ab1",
+        "name": "MP_IOT_Backup",
+        "filename": "C:\\Users\\marie\\OneDrive\\Bureau\\MP_IOT_Backup_Courant1.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 550,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3e3c1671cdf2beeb",
+        "type": "function",
+        "z": "584d946fafb51ab1",
+        "name": "write into a csv",
+        "func": "var t=new Date().toLocaleString();\nmsg.data=msg.payload\nmsg.payload={\"time\": t, \"Data_power_factor1\":msg.data}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 720,
+        "wires": [
+            [
+                "482f779f9c1ae331"
+            ]
+        ]
+    },
+    {
+        "id": "482f779f9c1ae331",
+        "type": "file",
+        "z": "584d946fafb51ab1",
+        "name": "MP_IOT_Backup",
+        "filename": "C:\\Users\\marie\\OneDrive\\Bureau\\MP_IOT_Backup_Power_Factor1.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1050,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f894ebae07461279",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "MP_IOT",
+        "name": "/Courant1",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "https://us-east-1-1.aws.cloud2.influxdata.com",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "4c1b2f5863be0263",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a61054190211a3f0",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "MP_IOT",
+        "name": "Power_Factor1",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "b2b10b77.06d948",
+        "type": "influxdb",
+        "hostname": "localhost",
+        "port": "8086",
+        "protocol": "http",
+        "database": "MP_IOT",
+        "name": "/Energy1",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "",
+        "timeout": "",
+        "rejectUnauthorized": false
+    }
+]
